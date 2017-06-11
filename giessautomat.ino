@@ -6,11 +6,11 @@ const uint8_t PIN_SENSOR_POWER = 4;
 const uint8_t PIN_SENSOR_ANALOG_IN = A0;
 
 // Timing
-const uint16_t LOOP_INTERVAL = 120000; // in ms
+const uint8_t LOOP_INTERVAL = 5; // in minutes
 const uint16_t PUMPING_DURATION = 1500; // in ms
 
 // Moisture threshold
-const uint16_t MOISTURE_THRESHOLD = 680; // higher values mean drier
+const uint16_t MOISTURE_THRESHOLD = 700; // higher values mean drier
 
 void setup() {
   /* Set up pins */
@@ -63,5 +63,6 @@ void loop() {
   }
 
   // Give the plant some time to absorb the water, then check again.
-  delay(LOOP_INTERVAL);
+  for (int i=0; i < LOOP_INTERVAL; i++)
+    delay((uint16_t)60000);
 }
