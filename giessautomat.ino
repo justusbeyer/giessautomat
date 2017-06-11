@@ -8,10 +8,12 @@ void setup() {
 
   // Pump: The pin connects to a FET which provides power to the pump
   pinMode(PIN_PUMP, OUTPUT);
+  digitalWrite(PIN_PUMP, LOW);
 
   // Sensor Power: We only power the sensor to save energy and
   // prevent unnecessary currents in the soil leading to corrosion.
   pinMode(PIN_SENSOR_POWER, OUTPUT);
+  digitalWrite(PIN_SENSOR_POWER, LOW);
 
   // Sensor Analog in: Thats the sensor´s voltage carrying
   // information on the degree of water in the soil
@@ -42,13 +44,15 @@ void loop() {
   Serial.print("Moisture: ");
   Serial.println(moistureLevel);
 
+  /* Pump water to the plant if necessary */
+
   if (/*moistureLevel is too low*/moistureLevel > 650) {
     // give it a sip of water
     digitalWrite(PIN_PUMP, HIGH);
-    delay(500);
+    delay(1500);
     digitalWrite(PIN_PUMP, LOW);
   }
 
-  // Look again in 10 seconds
-  delay(60000);
+  // Wake up again in 120 seconds
+  delay(120 * 1000 /* ms */);
 }
