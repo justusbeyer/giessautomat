@@ -1,7 +1,16 @@
-// Configuration
+/* Configuration */
+
+// Pins
 const uint8_t PIN_PUMP = 2;
 const uint8_t PIN_SENSOR_POWER = 4;
 const uint8_t PIN_SENSOR_ANALOG_IN = A0;
+
+// Timing
+const uint16_t LOOP_INTERVAL = 120000; // in ms
+const uint16_t PUMPING_DURATION = 1500; // in ms
+
+// Moisture threshold
+const uint16_t MOISTURE_THRESHOLD = 680; // higher values mean drier
 
 void setup() {
   /* Set up pins */
@@ -34,7 +43,7 @@ void loop() {
   // Wait for the sensor to wake up and sense.
   delay(500);
 
-  // Read the sensor value
+  // Read the sensor value (TODO: Rename moisture level to sth like drynessLevel)
   uint16_t moistureLevel = analogRead(PIN_SENSOR_ANALOG_IN);
 
   // Power down the sensor
@@ -46,13 +55,13 @@ void loop() {
 
   /* Pump water to the plant if necessary */
 
-  if (/*moistureLevel is too low*/moistureLevel > 650) {
-    // give it a sip of water
+  if (moistureLevel > MOISTURE_THRESHOLD) {
+    // Too dry: give it a sip of water
     digitalWrite(PIN_PUMP, HIGH);
-    delay(1500);
+    delay(PUMPING_DURATION);
     digitalWrite(PIN_PUMP, LOW);
   }
 
-  // Wake up again in 120 seconds
-  delay(120 * 1000 /* ms */);
+  // Give the plant some time to absorb the water, then check again.
+  delay(LOOP_INTERVAL);
 }
